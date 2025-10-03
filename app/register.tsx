@@ -2,56 +2,64 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function HomeScreen() {
+export default function RegisterScreen() {
   const router = useRouter();
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // backend URL
-  const API_URL = "http://167.96.161.195:4000"; 
+  const API_URL = "http://167.96.161.195:4000";
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter both email and password");
+  const handleRegister = async () => {
+    if (!displayName || !email || !password) {
+      Alert.alert("Error", "Please fill in all fields");
       return;
     }
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          display_name: displayName,
+          email,
+          password,
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        Alert.alert("Login failed", data.error || "Something went wrong");
+        Alert.alert("Register failed", data.error || "Something went wrong");
       } else {
-        Alert.alert("Success", `Welcome back ${data.user.display_name || data.user.email}`);
-        console.log("JWT Token:", data.token);
-        router.replace("/(tabs)/home");
+        Alert.alert("Success", "Account created! You can now log in.");
+        router.replace("/"); // go back to login page
       }
     } catch (err) {
-      console.error("Error logging in:", err);
+      console.error("❌ Error registering:", err);
       Alert.alert("Error", "Could not connect to server");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRegister = () => {
-    router.push("/register");
-  };
-
   return (
     <View style={styles.container}>
+      {/* Reuse Welcome Branding */}
       <Text style={styles.title}>
         Welcome to{"\n"}
         <Text style={styles.brand}>Universal Fitness</Text>
       </Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        placeholderTextColor="#888"
+        value={displayName}
+        onChangeText={setDisplayName}
+      />
 
       <TextInput
         style={styles.input}
@@ -72,12 +80,12 @@ export default function HomeScreen() {
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? "Logging in..." : "Login"}</Text>
+      <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
+        <Text style={styles.buttonText}>{loading ? "Registering..." : "Register"}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-        <Text style={styles.registerText}>Don’t have an account? Register</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={() => router.replace("/")}>
+        <Text style={styles.loginText}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -89,18 +97,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#0A0A1A",
     padding: 30,
     justifyContent: "flex-start",
-    paddingTop: 150,
-    
+    paddingTop: 80,
   },
   title: {
-    fontSize: 40,
+    fontSize: 28,
     fontWeight: "600",
     color: "#00B8D4",
-    marginBottom: 60,
+    marginBottom: 20,
     textAlign: "left",
   },
   brand: {
-    fontSize: 45,
+    fontSize: 40,
     fontWeight: "bold",
     color: "#00E5FF",
     textShadowColor: "#00E5FF",
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 18,
     color: "#EAEAEA",
-    backgroundColor: "#000000ff",
+    backgroundColor: "#102030",
     alignSelf: "center",
   },
   button: {
@@ -130,15 +137,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#00E5FF",
   },
   buttonText: {
-    color: "#000000ff",
+    color: "#0A0A1A",
     fontSize: 18,
     fontWeight: "bold",
   },
-  registerButton: {
+  loginButton: {
     marginTop: 20,
     alignItems: "center",
   },
-  registerText: {
+  loginText: {
     color: "#00E5FF",
     fontSize: 16,
     fontWeight: "600",
