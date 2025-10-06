@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from "expo-router";
+
+const UFbackground = require("@/assets/images/UFbackground.png");
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -8,8 +11,7 @@ export default function HomeScreen() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // backend URL
-  const API_URL = "http://167.96.161.195:4000"; 
+  const API_URL = "http://167.96.189.94:4000";
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -47,100 +49,119 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        Welcome to{"\n"}
-        <Text style={styles.brand}>Universal Fitness</Text>
-      </Text>
+    <ImageBackground source={UFbackground} resizeMode="cover" style={styles.background}>
+      <View style={styles.overlay}>
+        {/* Title */}
+        <Text style={styles.title}>
+          Welcome to{"\n"}
+          <Text style={styles.brand}>Universal Fitness</Text>
+        </Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#888"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+        {/* Login Form */}
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#888"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#888"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#888"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? "Logging in..." : "Login"}</Text>
-      </TouchableOpacity>
+          <LinearGradient
+            colors={['#4facfe', '#007BFF']}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}
+            style={styles.gradientButton}
+          >
+            <TouchableOpacity
+              style={styles.buttonInner}
+              onPress={handleLogin}
+              disabled={loading}
+            >
+              <Text style={styles.buttonText}>
+                {loading ? 'Logging in...' : 'Login'}
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
 
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-        <Text style={styles.registerText}>Don’t have an account? Register</Text>
-      </TouchableOpacity>
-    </View>
+          <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+            <Text style={styles.registerText}>Don’t have an account? Register here</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: "#0A0A1A",
-    padding: 30,
-    justifyContent: "flex-start",
+    width: "100%",
+    height: "100%",
+  },
+  overlay: {
+    flex: 1,
+    paddingHorizontal: 30,
     paddingTop: 150,
-    
   },
   title: {
-    fontSize: 40,
+    fontSize: 45,
     fontWeight: "600",
-    color: "#00B8D4",
-    marginBottom: 60,
+    color: "#b5c4d3ff",
     textAlign: "left",
   },
   brand: {
-    fontSize: 45,
+    fontSize: 48,
     fontWeight: "bold",
-    color: "#00E5FF",
-    textShadowColor: "#00E5FF",
+    color: "#00AFFF",
+    textShadowColor: "#00AFFF",
     textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
+    textShadowRadius: 5,
+  },
+  form: {
+    marginTop: 40,
   },
   input: {
-    width: "85%",
+    width: "100%",
     height: 55,
     borderWidth: 2,
-    borderColor: "#00B8D4",
+    borderColor: "#00AFFF",
     borderRadius: 12,
     paddingHorizontal: 15,
     marginBottom: 20,
     fontSize: 18,
     color: "#EAEAEA",
-    backgroundColor: "#000000ff",
-    alignSelf: "center",
   },
-  button: {
-    width: "85%",
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    alignSelf: "center",
-    marginTop: 10,
-    backgroundColor: "#00E5FF",
+  gradientButton: {
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  buttonInner: {
+    paddingVertical: 14,
+    alignItems: 'center',
   },
   buttonText: {
-    color: "#000000ff",
-    fontSize: 18,
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   registerButton: {
-    marginTop: 20,
+    marginTop: 25,
     alignItems: "center",
   },
   registerText: {
-    color: "#00E5FF",
+    color: '#00AFFF',
     fontSize: 16,
-    fontWeight: "600",
   },
 });
