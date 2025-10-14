@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, A
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from "expo-router";
 
-const UFbackground = require("@/assets/images/UFbackground.png");
+const UFbackground = require("@/assets/images/uflastbackground.png");
 
 export default function HomeScreen() {
   const router = useRouter();
