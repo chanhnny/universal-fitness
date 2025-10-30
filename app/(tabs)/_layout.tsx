@@ -11,23 +11,59 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+    screenOptions={{
+    tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+    headerShown: false,
+    tabBarButton: HapticTab,
+
+    tabBarStyle: {
+      height: 120,
+      paddingBottom: 10,
+      paddingTop: 10,
+    },
+    tabBarLabelStyle: {
+      fontSize: 13,
+      marginBottom: 5,
+    },
+  }}
+    >
       <Tabs.Screen
-        name="home"
+        name="workout"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Workout',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={26} name="figure.strengthtraining.traditional" color={color} />
+          ),
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="nutrition"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Nutrition',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={26} name="fork.knife" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          title: 'Calendar',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={26} name="calendar" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={26} name="person.crop.circle" color={color} />
+          ),
         }}
       />
     </Tabs>

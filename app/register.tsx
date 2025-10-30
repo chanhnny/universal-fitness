@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, A
 import { useRouter } from "expo-router";
 import { LinearGradient } from 'expo-linear-gradient';
 
-const UFbackground = require("@/assets/images/uftwobackground.png");
+const UFbackground = require("@/assets/images/uflastbackground.png");
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "http://167.96.189.94:4000";
+  const API_URL = "http://167.96.178.81:4000";
 
   const handleRegister = async () => {
     if (!displayName || !email || !password) {

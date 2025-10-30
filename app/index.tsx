@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from "expo-router";
+import { useAuth } from "@/contexts/AuthContext";
 
 const UFbackground = require("@/assets/images/uflastbackground.png");
 
 export default function HomeScreen() {
+  const { setUser } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "http://167.96.189.94:4000";
+  const API_URL = "http://167.96.178.81:4000";
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -32,9 +34,10 @@ export default function HomeScreen() {
       if (!response.ok) {
         Alert.alert("Login failed", data.error || "Something went wrong");
       } else {
+        setUser(data.user);
         Alert.alert("Success", `Welcome back ${data.user.display_name || data.user.email}`);
         console.log("JWT Token:", data.token);
-        router.replace("/(tabs)/home");
+        router.replace("/(tabs)/workout/workoutIndex");
       }
     } catch (err) {
       console.error("Error logging in:", err);
